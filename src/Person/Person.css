@@ -1,0 +1,9 @@
+.person {
+    margin: 16px auto;
+    text-align: center;
+    box-shadow: 1px 1px 5px #eee;
+    border: 1px solid #ddd;
+    color: crimson;
+    width: 50vw;
+    padding: 1rem 2rem;
+}
