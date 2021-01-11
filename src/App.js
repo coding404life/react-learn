@@ -1,65 +1,86 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 import './App.css';
-import Person from './Person/Person';
+import UserInput from './userInput/Userinput';
+import UserOutPut from './userOutPut/Useroutput';
 
-const App = props => {
-  const [ personState, setPersonState ] = useState({
+class App extends Component {
+  state = {
     person: [
-      { name: 'yahya mohamed', age: 24 },
-      { name: 'mohamed', age: 21 },
-      { name: 'ahmed', age: 22 }
+      { name: 'yahya', age: 24 },
     ],
-    otherstate: 'un tuched'
-  })
+    username: 'yahya mohamed',
+    job: 'Front End React Developer',
+    showPerson: false,
+    name: 'new name',
+    age: 24
+  }
 
-  const switchNameHandler = (yahya) => {
-    setPersonState({
-      person: [
-        { name: yahya, age: 24 },
-        { name: 'mohamed mosheneb', age: 21 },
-        { name: 'ahmed shaban', age: 24 }
-      ]
-    });
+  nameChangeHandler = (e) => {
+    this.setState(
+      {
+        name: e.target.value
+      }
+    )
   }
-  const changeNameHandler = (event) => {
-    setPersonState({
-      person: [
-        { name: event.target.value, age: 24 },
-        { name: 'mohamed mosheneb', age: 21 },
-        { name: 'ahmed shaban', age: 24 }
-      ]
-    });
+  ageChangeHandler = (e) => {
+    this.setState({
+      age: e.target.value
+    })
   }
-  const style = {
-    backgroundColor: 'white',
-    border: '1px solid blue',
-    padding: '.5rem 1rem',
-    fontWeight: 'bold'
-  }
-  return (
-    <div className="App">
-      <h1>nice head</h1>
-      <button style={style} onClick={() => switchNameHandler('yahya')}>switch ass</button>
-      <Person
-        name={personState.person[ 0 ].name}
-        age={personState.person[ 0 ].age}
-        change={changeNameHandler}
-      />
-      <Person
-        name={personState.person[ 1 ].name}
-        age={personState.person[ 1 ].age}
-        click={switchNameHandler}
-      >Nani
-        </Person>
-      <Person
-        name={personState.person[ 2 ].name}
-        age={personState.person[ 2 ].age}
-      />
-    </div>
-  );
 
-  //  return React.createElement('div', { className: 'App' }, React.createElement('h1', null, 'hello nissos'));
+  togglePersonHandler = () => {
+    const doseShow = this.state.showPerson;
+    this.setState({ showPerson: !doseShow })
+  }
+
+  deletePersonHandler = (personIndex) => {
+    // const person = this.state.person.slice();
+    const person = [ ...this.state.person ]
+    person.splice(personIndex, 1);
+    this.setState({ person: person })
+    console.log(person);
+  }
+
+  addPersonHandler = () => {
+    const persons = [ ...this.state.person ]
+    const newName = { name: this.state.name, age: this.state.age }
+    persons.push(newName)
+    this.setState({
+      person: persons
+    })
+  }
+
+  render() {
+    let person = null;
+
+    if (this.state.showPerson) {
+      person = (
+        <div>
+          {this.state.person.map((cur, index) => {
+            return <UserOutPut
+              click={() => this.deletePersonHandler(index)}
+              name={cur.name}
+              age={cur.age}
+              key={index}
+              id={index} />
+          })}
+        </div>
+      )
+    }
+
+    return (
+      <div className='App' >
+        <h1>hello</h1>
+        <UserInput changed={this.nameChangeHandler} type={'text'} />
+        <UserInput changed={this.ageChangeHandler} type={'number'} />
+        <br />
+        <button onClick={this.togglePersonHandler}>toggole Person</button>
+        <button onClick={this.addPersonHandler}>add new person</button>
+        {person}
+      </div>
+    )
+  }
 }
 
-export default App;
 
+export default App;

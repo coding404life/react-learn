@@ -2,6 +2,10 @@
   text-align: center;
 }
 
+.App ol {
+  text-align: left;
+}
+
 h1 {
   color: crimson;
 }
